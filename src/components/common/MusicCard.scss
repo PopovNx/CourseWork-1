@@ -28,4 +28,8 @@
         transform: scale(1.05);
     }
     cursor: pointer;
+
+    &.playing {
+        background-color: #ff0000;
+    }
 }

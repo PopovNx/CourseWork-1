@@ -1,9 +1,6 @@
 
 export type MusicRecord = {
     id: string;
-    name: string;
-    size: string;
+    title: string;
     duration: string;
-    poster: string;
-    playUrl: string;
 };
