@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { MockApi } from "./service/mockApi";
 import { MusicRecord } from "./dto";
-import Header from "./components/Header";
-import MusicCardList from "./components/MusicCardList";
-import MusicPlayerModal from "./components/MusicPlayerModal";
+import Header from "@/components/main/Header";
+import MusicCardList from "@/components/common/MusicCardList";
+import MusicPlayerModal from "@/components/common/MusicPlayerModal";
 
 export default () => {
   const [musics, setMusics] = useState<MusicRecord[]>([]);
