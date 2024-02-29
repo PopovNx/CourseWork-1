@@ -1,18 +1,20 @@
-import "./App.css";
 import { useState } from "react";
 
 import { useEffect } from "react";
-import { Api } from "./api";
-import { MusicInfo } from "./dto/MusicInfo";
-import MusicCard from "./components/MusicCard";
+import { MockApi } from "./service/mockApi";
+import { MusicRecord } from "./dto";
+import Header from "./components/Header";
+import MusicCardList from "./components/MusicCardList";
+import MusicPlayerModal from "./components/MusicPlayerModal";
 
 export default () => {
-  const [musics, setMusics] = useState<MusicInfo[]>([]);
+  const [musics, setMusics] = useState<MusicRecord[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [currentMusic, setCurrentMusic] = useState<MusicInfo | null>(null);
+  const [currentMusic, setCurrentMusic] = useState<MusicRecord | null>(null);
   const fetchMusicInfo = async () => {
     setLoading(true);
-    const infos = await Api.fetchMusicInfo();
+    const infos = await MockApi.fetchMusicRecords();
     setMusics(infos);
     setLoading(false);
   };
@@ -21,25 +23,24 @@ export default () => {
     fetchMusicInfo();
   }, []);
 
+  const onMusicSelected = (music: MusicRecord | null) => {
+    console.log("Selected music", music);
+    setCurrentMusic(music);
+  };
+
   return (
-    <div className="App">
-      <h1>Music List</h1>
+    <>
+      <main>
+        <Header title="Super player"></Header>
+      </main>
       {loading && <p>Loading...</p>}
-      {musics.map((info) => (
-        <p
-          key={info.id}
-          onClick={() => setCurrentMusic(info)}
-          className={`TrackItem ${
-            currentMusic?.id === info.id ? "current" : ""
-          }`}
-        >
-          {info.name}
-        </p>
-      ))}
-      <h3>Player</h3>
+      <MusicCardList cards={musics} onSelectedMusic={onMusicSelected} />
       {currentMusic && (
-        <MusicCard key={currentMusic.id} {...currentMusic} />
+        <MusicPlayerModal
+          activeMusic={currentMusic}
+          onExit={() => onMusicSelected(null)}
+        />
       )}
-    </div>
+    </>
   );
 };
