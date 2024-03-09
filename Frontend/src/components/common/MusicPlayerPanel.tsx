@@ -5,6 +5,8 @@ import { Api } from "@/service/api";
 
 interface MusicPlayerProps {
   activeMusic: MusicRecord;
+  onNext?: () => void;
+  onPrevious?: () => void;
 }
 
 interface MusicPlayerPlaySeekerProps {
@@ -80,6 +82,7 @@ const MusicPlayerPanel: React.FC<MusicPlayerProps> = ({ activeMusic }) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const playing = audioRef.current ? !audioRef.current.paused : false;
 
+
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -99,9 +102,19 @@ const MusicPlayerPanel: React.FC<MusicPlayerProps> = ({ activeMusic }) => {
   };
 
   React.useEffect(() => {
+    const mediaSession = navigator.mediaSession;
+
     const interval = setInterval(() => {
       const audio = audioRef.current;
-      if (!audio) return;
+      if (!audio) return;      
+      mediaSession.metadata = new MediaMetadata({
+        title: "Super player",
+        album: activeMusic.title,
+        artwork: [
+          { src: Api.resolvePosterUrl(activeMusic.id), sizes: "96x96", type: "image/png" },
+        ],
+      });
+
       const newProgress = audio.currentTime / audio.duration;
       setProgress(newProgress);
       console.log("Progress", newProgress);

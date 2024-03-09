@@ -13,15 +13,36 @@ const PageLoading: React.FC = () => {
 
 const MainPage: React.FC = () => {
   const [musicId, setMusicId] = React.useState<string | null>(null);
-  const { data: tracks, isLoading } = Api.useTracks();
-
+  const { data: tracks, isLoading, refetch } = Api.useTracks();
   const onMusicSelected = (music: MusicRecord | null) => {
     console.log("Selected music", music);
     setMusicId(music?.id || null);
   };
 
-  const hasMusic = !isLoading && tracks != null && tracks.length > 0;
+  React.useEffect(() => {
+    const interval = setInterval(() => refetch(), 5000);
+    return () => {
+      clearInterval(interval);
+    }
+  }, []);
+
+  const hasMusic = !isLoading && tracks != null;
   const activeMusic = tracks?.find((track) => track.id === musicId) || null;
+
+  const currentIndex = tracks?.findIndex((track) => track.id === musicId) || 0;
+  const nextMusic = tracks?.[currentIndex + 1] || tracks?.[0] || null;
+  const previousMusic = tracks?.[currentIndex - 1] || tracks?.[tracks.length - 1] || null;
+
+
+
+
+  navigator.mediaSession.setActionHandler('nexttrack', () => {
+    setMusicId(nextMusic?.id || null);
+  });
+
+  navigator.mediaSession.setActionHandler('previoustrack', () => {
+    setMusicId(previousMusic?.id || null);
+  });
 
   const listBlock = hasMusic ? (
     <MusicCardList
@@ -37,7 +58,7 @@ const MainPage: React.FC = () => {
     <main className="MainPage">
       <Header title="Super player"></Header>
       {listBlock}
-      {activeMusic && <MusicPlayerPanel activeMusic={activeMusic} />}
+      {activeMusic && <MusicPlayerPanel activeMusic={activeMusic}  />}
     </main>
   );
 };
