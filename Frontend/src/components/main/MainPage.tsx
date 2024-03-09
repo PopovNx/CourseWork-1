@@ -1,7 +1,7 @@
 import "./MainPage.scss";
 
 import React from "react";
-import { MockApi } from "@/service/mockApi";
+import { Api } from "@/service/api";
 import { MusicRecord } from "@/dto";
 import Header from "@/components/main/Header";
 import MusicCardList from "@/components/common/MusicCardList";
@@ -14,7 +14,7 @@ const MainPage: React.FC = () => {
   );
   const fetchMusicInfo = async () => {
     setLoading(true);
-    const infos = await MockApi.fetchMusicRecords();
+    const infos = await Api.fetchMusicRecords();
     setMusics(infos);
     setLoading(false);
     setCurrentMusic(infos[0]);

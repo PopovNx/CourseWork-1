@@ -1,7 +1,7 @@
 import React from "react";
 import "./MusicPlayerPanel.scss";
 import { MusicRecord } from "@/dto";
-import { MockApi } from "@/service/mockApi";
+import { Api } from "@/service/api";
 
 interface MusicPlayerProps {
   activeMusic: MusicRecord;
@@ -109,8 +109,8 @@ const MusicPlayerPanel: React.FC<MusicPlayerProps> = ({ activeMusic }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const poster = MockApi.resolveMusicCover(activeMusic.id);
-  const musicUrl = MockApi.resolveMusicUrl(activeMusic.id);
+  const poster = Api.resolvePosterUrl(activeMusic.id);
+  const musicUrl = Api.resolveTrackUrl(activeMusic.id);
   return (
     <div className="MusicPlayerPanel">
       <div className="MusicPlayerPanel__songInfo">

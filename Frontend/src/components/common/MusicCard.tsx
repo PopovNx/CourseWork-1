@@ -1,4 +1,4 @@
-import { MockApi } from "@/service/mockApi";
+import { Api } from "@/service/api";
 import "./MusicCard.scss";
 import { MusicRecord } from "@/dto";
 
@@ -9,7 +9,7 @@ interface MusicCardProps {
 }
 
 const MusicCard: React.FC<MusicCardProps> = ({ record, onSelected, isPlaying }) => {
-  const posterUrl = MockApi.resolveMusicCover(record.id);
+  const posterUrl = Api.resolvePosterUrl(record.id);
   const playingClass = isPlaying ? "playing" : "";
   
   return (
