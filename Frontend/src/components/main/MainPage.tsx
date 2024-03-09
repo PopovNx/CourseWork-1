@@ -6,40 +6,38 @@ import { MusicRecord } from "@/dto";
 import Header from "@/components/main/Header";
 import MusicCardList from "@/components/common/MusicCardList";
 import MusicPlayerPanel from "@/components/common/MusicPlayerPanel";
-const MainPage: React.FC = () => {
-  const [musics, setMusics] = React.useState<MusicRecord[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [currentMusic, setCurrentMusic] = React.useState<MusicRecord | null>(
-    null
-  );
-  const fetchMusicInfo = async () => {
-    setLoading(true);
-    const infos = await Api.fetchMusicRecords();
-    setMusics(infos);
-    setLoading(false);
-    setCurrentMusic(infos[0]);
-  };
 
-  React.useEffect(() => {
-    fetchMusicInfo();
-  }, []);
+const PageLoading: React.FC = () => {
+  return <p>Loading...</p>;
+};
+
+const MainPage: React.FC = () => {
+  const [musicId, setMusicId] = React.useState<string | null>(null);
+  const { data: tracks, isLoading } = Api.useTracks();
 
   const onMusicSelected = (music: MusicRecord | null) => {
     console.log("Selected music", music);
-    setCurrentMusic(music);
+    setMusicId(music?.id || null);
   };
 
-  const listBlock = loading ? (
-    <p>Loading...</p>
+  const hasMusic = !isLoading && tracks != null && tracks.length > 0;
+  const activeMusic = tracks?.find((track) => track.id === musicId) || null;
+
+  const listBlock = hasMusic ? (
+    <MusicCardList
+      cards={tracks}
+      onSelectedMusic={onMusicSelected}
+      selectedId={musicId}
+    />
   ) : (
-    <MusicCardList cards={musics} onSelectedMusic={onMusicSelected} selectedId={currentMusic?.id || null} />
+    <PageLoading />
   );
 
   return (
     <main className="MainPage">
       <Header title="Super player"></Header>
       {listBlock}
-      {currentMusic && <MusicPlayerPanel activeMusic={currentMusic} />}
+      {activeMusic && <MusicPlayerPanel activeMusic={activeMusic} />}
     </main>
   );
 };
