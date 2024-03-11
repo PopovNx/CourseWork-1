@@ -1,0 +1,36 @@
+.MainPage{
+    display: grid;
+    grid-template-areas: "pages content content"
+                         "history content content"
+                         "player player player";
+
+    grid-template-rows: 150px 1fr 75px;
+    grid-template-columns: 300px 3fr 1fr;
+    height: 100%;
+    gap: 10px;
+    padding: 10px;
+
+    &__pages{
+        grid-area: pages;
+      
+    }
+
+
+    &__history{
+        grid-area: history;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__content.section{
+        grid-area: content;
+        background: linear-gradient(180deg, rgba(255, 254, 254, 0.1) 0%, rgba(0, 0, 0, 0) 20%);
+        padding: 10px;
+    }
+
+
+    &__player{
+        grid-area: player;
+    }
+}

@@ -1,5 +1,4 @@
 import "./MusicCardList.scss";
-import { MusicRecord } from "@/dto";
 import MusicCard from "@/components/common/MusicCard";
 import { Api } from "@/service/api";
 

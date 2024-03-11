@@ -38,4 +38,13 @@ export abstract class Api {
   public static useTracksSuspense = () => useSuspenseQuery(this.useTracksConfig);
 
 
+  public static uploadMusic(formData: FormData) {
+    return Api.instance.post("tracks", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      timeout: 20000,
+    });
+  }
+
 }
