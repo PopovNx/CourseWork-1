@@ -2,6 +2,11 @@ import React from "react";
 import "./MusicPlayerPanel.scss";
 import { MusicRecord } from "@/dto";
 import { Api } from "@/service/api";
+import moment from "moment";
+import playIcon from "@/assets/play.svg?url";
+import pauseIcon from "@/assets/pause.svg?url";
+import nextIcon from "@/assets/next.svg?url";
+import prevIcon from "@/assets/prev.svg?url";
 
 interface MusicPlayerProps {
   activeMusic: MusicRecord;
@@ -16,7 +21,7 @@ interface MusicPlayerPlaySeekerProps {
 
 interface MusicPlayerPlayControlsProps {
   playing: boolean;
-  onPlayToggle?: (playing: boolean) => void;
+  togglePlay?: () => void;
 }
 
 const MusicPlayerPlaySeeker: React.FC<MusicPlayerPlaySeekerProps> = ({
@@ -52,44 +57,46 @@ const MusicPlayerPlaySeeker: React.FC<MusicPlayerPlaySeekerProps> = ({
   );
 };
 
-const PlayControls: React.FC<MusicPlayerPlayControlsProps> = ({
-  playing,
-  onPlayToggle,
-}) => {
+const PlayControls: React.FC<MusicPlayerPlayControlsProps> = (props) => {
   return (
     <div className="PlayControls">
-      <button onClick={() => onPlayToggle && onPlayToggle(!playing)}>
-        {playing ? "Pause" : "Play"}
+      <button
+        title="Previous"
+        className="PlayControls__previous PlayControls__button"
+      >
+        <img src={prevIcon} alt="Perv" />
+      </button>
+      <button
+        onClick={props.togglePlay}
+        title="Play/Pause"
+        className="PlayControls__play PlayControls__button"
+      >
+        {props.playing ? (
+          <img src={pauseIcon} alt="Pause" />
+        ) : (
+          <img src={playIcon} alt="Play" />
+        )}
+      </button>
+      <button title="Next" className="PlayControls__next PlayControls__button">
+        <img src={nextIcon} alt="Next" />
       </button>
     </div>
   );
 };
 
-const formatTime = (current: number) => {
-  //00:00
-  const minutes = Math.floor(current / 60);
-  const seconds = Math.floor(current % 60);
-
-  const minutesStr = minutes.toString().padStart(2, "0");
-  const secondsStr = seconds.toString().padStart(2, "0");
-
-  return `${minutesStr}:${secondsStr}`;
-
-}
+const formatTime = (current: number) =>
+  moment.utc(current * 1000).format("mm:ss");
 
 const MusicPlayerPanel: React.FC<MusicPlayerProps> = ({ activeMusic }) => {
   const [progress, setProgress] = React.useState(0);
   const audioRef = React.useRef<HTMLAudioElement>(null);
-  const playing = audioRef.current ? !audioRef.current.paused : false;
-
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
-      audio.play();
+    if (!audioRef.current) return;
+    if (audioRef.current.paused) {
+      audioRef.current.play();
     } else {
-      audio.pause();
+      audioRef.current.pause();
     }
   };
   const onSeek = (progress: number) => {
@@ -106,12 +113,16 @@ const MusicPlayerPanel: React.FC<MusicPlayerProps> = ({ activeMusic }) => {
 
     const interval = setInterval(() => {
       const audio = audioRef.current;
-      if (!audio) return;      
+      if (!audio) return;
       mediaSession.metadata = new MediaMetadata({
         title: "Super player",
         album: activeMusic.title,
         artwork: [
-          { src: Api.resolvePosterUrl(activeMusic.id), sizes: "96x96", type: "image/png" },
+          {
+            src: Api.resolvePosterUrl(activeMusic.id),
+            sizes: "96x96",
+            type: "image/png",
+          },
         ],
       });
 
@@ -124,27 +135,30 @@ const MusicPlayerPanel: React.FC<MusicPlayerProps> = ({ activeMusic }) => {
 
   const poster = Api.resolvePosterUrl(activeMusic.id);
   const musicUrl = Api.resolveTrackUrl(activeMusic.id);
+
   return (
     <div className="MusicPlayerPanel">
       <div className="MusicPlayerPanel__songInfo">
-        <h2 className="MusicPlayerPanel__songInfo-title">{activeMusic.title}</h2>
+        <div className="MusicPlayerPanel__progressControl">
+          <MusicPlayerPlaySeeker progress={progress} onSeek={onSeek} />
+        </div>
+        <h2 className="MusicPlayerPanel__songInfo-title">
+          {activeMusic.title}
+        </h2>
         <div className="MusicPlayerPanel__songInfo-image">
           <img src={poster} alt={activeMusic.title} />
         </div>
       </div>
-      <div className="MusicPlayerPanel__progressControl">
-        <MusicPlayerPlaySeeker progress={progress} onSeek={onSeek} />
+      <div className="MusicPlayerPanel__controls">
+        <PlayControls
+          playing={audioRef.current ? !audioRef.current.paused : false}
+          togglePlay={togglePlay}
+        />
       </div>
-
       <div className="MusicPlayerPanel__metrix">
-        <p>{formatTime(audioRef.current?.currentTime || 0)}</p>
-         /
+        <p>{formatTime(audioRef.current?.currentTime || 0)}</p>/
         <p>{formatTime(audioRef.current?.duration || 0)}</p>
       </div>
-      <div className="MusicPlayerPanel__controls">
-        <PlayControls playing={playing} onPlayToggle={togglePlay} />
-      </div>
-
       <audio
         autoPlay
         controls

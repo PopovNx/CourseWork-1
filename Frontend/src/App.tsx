@@ -5,8 +5,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 
-const queryClient = new QueryClient()
-
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   return (

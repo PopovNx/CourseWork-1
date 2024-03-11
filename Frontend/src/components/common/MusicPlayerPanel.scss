@@ -1,11 +1,12 @@
 .MusicPlayerPanel {
+    height: 100%;
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
-    padding: 10px;
-    background-color: #282c34;
+    gap: 10px;
+    padding-top: 5px;
 
-    grid-template-areas: "songInfo progressControl metrix сontrols";
+    grid-template-areas: "сontrols metrix songInfo";
 
     &__songInfo {
         grid-area: songInfo;
@@ -32,11 +33,14 @@
     }
 
     &__progressControl {
-        grid-area: progressControl;
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        top: 0;
+        left: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100%;
     }
 
     &__controls {
@@ -68,7 +72,7 @@
     &__progress {
         width: 100%;
         height: 8px;
-        background-color: #fff;
+        background-color: #1f2423;
         border-radius: 4px;
         display: flex;
         align-items: center;
@@ -94,5 +98,36 @@
         cursor: pointer;
         position: relative;
         left: 0;
+        opacity: 0;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.PlayControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.5em;
+    color: white;
+    padding-inline: 10px;
+    &__button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        &:hover {
+            transform: scale(1.2);
+        }
+        width: 35px;
+        height: 35px;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
 }

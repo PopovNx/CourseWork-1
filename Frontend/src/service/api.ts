@@ -1,7 +1,7 @@
 import { MusicRecord, MusicRecordList } from "@/dto";
 import axios from "axios";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 
 export abstract class Api {
   private static resolveApiUrl(path: string = ""): string {
@@ -14,6 +14,7 @@ export abstract class Api {
   });
 
   public static async fetchMusicRecords(): Promise<MusicRecord[]> {
+ //   await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log("fetchMusicRecords");
     const data = await Api.instance.get("tracks");
     try {
@@ -32,7 +33,9 @@ export abstract class Api {
     return Api.resolveApiUrl(`tracks/${trackId}/poster`);
   }
 
-  public static useTracks() {
-    return useQuery({ queryKey: ["tracks"], queryFn: Api.fetchMusicRecords });
-  }
+  private static useTracksConfig = { queryKey: ["tracks"], queryFn: Api.fetchMusicRecords };
+  public static useTracks = () => useQuery(this.useTracksConfig);
+  public static useTracksSuspense = () => useSuspenseQuery(this.useTracksConfig);
+
+
 }

@@ -15,11 +15,12 @@ const MusicCard: React.FC<MusicCardProps> = ({ record, onSelected, isPlaying }) 
   const duration = moment.utc(record.duration * 1000).format("mm:ss");
   return (
     <div className={`MusicCard ${playingClass}`} onClick={() => onSelected && onSelected(record)}>
-      <p>{duration}</p>
       <div className="img-wapper">
         <img src={posterUrl} alt={record.title} />
       </div>
+      <span className="play-icon"> ▶</span>
       <p>{record.title}</p>
+      <p>{duration}</p>
     </div>
   );
 };

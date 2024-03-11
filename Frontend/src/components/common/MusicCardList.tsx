@@ -1,23 +1,24 @@
 import "./MusicCardList.scss";
 import { MusicRecord } from "@/dto";
 import MusicCard from "@/components/common/MusicCard";
+import { Api } from "@/service/api";
 
 interface MusicCardListProps {
-  cards: MusicRecord[];
-  onSelectedMusic?: (music: MusicRecord) => void;
+  onSelect: (id: string) => void;
   selectedId: string | null;
 }
 
 const MusicCardList: React.FC<MusicCardListProps> = ({
-  cards,
-  onSelectedMusic,
+  onSelect,
   selectedId,
 }) => {
-  const cardList = cards.map((record) => (
+  const { data: tracks } = Api.useTracksSuspense();
+
+  const cardList = tracks.map((record) => (
     <MusicCard
       key={record.id}
       record={record}
-      onSelected={onSelectedMusic}
+      onSelected={() => onSelect(record.id)}
       isPlaying={record.id === selectedId}
     />
   ));
