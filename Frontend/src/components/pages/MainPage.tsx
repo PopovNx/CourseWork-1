@@ -10,10 +10,11 @@ import { HistoryRecord } from "@/dto/HistoryRecord";
 import moment from "moment";
 import HistoryList from "@/components/common/HistoryList";
 import Header from "@/components/common/Header";
+
 const MainPage: React.FC = () => {
+  const [history, setHistory] = useLocalStorage<HistoryRecord[]>("history", []);
   const [musicId, setMusicId] = React.useState<string | null>(null);
   const { data: tracks } = Api.useTracks();
-  const [history, setHistory] = useLocalStorage<HistoryRecord[]>("history", []);
 
   const addHistory = (id: string) => {
     setHistory((prev) => {
@@ -38,7 +39,7 @@ const MainPage: React.FC = () => {
   return (
     <main className="MainPage">
       <div className="MainPage__pages section">
-        <Header/>
+        <Header />
       </div>
       <div className="MainPage__history section">
         <h1>History</h1>

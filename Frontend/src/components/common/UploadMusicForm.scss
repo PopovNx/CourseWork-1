@@ -1,38 +1,65 @@
-.UploadMusicForm{
+.UploadMusicForm {
     width: 100%;
     height: 100%;
 
     display: flex;
     flex-direction: column;
     gap: 10px;
-    form{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-
-        input{
+    form {
+        display: grid;
+        place-items: center;
+        height: 100%;
+       
+        fieldset{
+            width: min(100%, 500px);
+            height: min(100%, 500px);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             padding: 10px;
             border-radius: 8px;
             background-color: #181818;
-            color: #fff;
             border: none;
-            font-size: 1.5em;
         }
 
-        button{
+        input {
             padding: 10px;
-            border-radius: 8px;
             background-color: #181818;
             color: #fff;
             border: none;
             font-size: 1.5em;
+            outline: none;
+            border-bottom: 1px solid #fff;
+            height: 50px;
+            width: 100%;
+        }
+        label {
+            font-size: 1.5em;
+            color: #fff;
+        }
+        input::file-selector-button {
+            background-color: #181818;
+            color: #fff;
+            border: none;
+            outline: none;
+            border-right: 1px solid #fff;
+            padding: 5px;
+        }
+
+        button {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #181818;
+            color: #fff;
+            font-size: 1.5em;
+            border: none;
+            outline: none;
             cursor: pointer;
             transition: background-color 0.2s;
-
-            &:hover{
+            &:hover {
                 background-color: #282828;
             }
+            box-shadow: 0 0 1px 1px #fff;
         }
     }
-
 }
