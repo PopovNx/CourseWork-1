@@ -1,19 +1,17 @@
-import { HistoryRecord } from "@/dto/HistoryRecord";
 import moment from "moment";
 import "./HistoryList.scss";
 import { Api } from "@/service/api";
+import { useMusicPlayer } from "@/service/playerStore";
 
-const HistoryList: React.FC<{
-  history: HistoryRecord[];
-  onSelect: (id: string) => void;
-}> = ({ history, onSelect }) => {
+const HistoryList: React.FC = () => {
+  const player = useMusicPlayer();
   return (
     <div className="HistoryList">
-      {history.map((record) => (
+      {player.history.map((record) => (
         <div
           key={record.id + record.timeUnix}
           className="HistoryList__record"
-          onClick={() => onSelect(record.id)}
+          onClick={() => player.pausePlay(record.id)}
         >
           <div className="HistoryList__record-poster">
             <img src={Api.resolvePosterUrl(record.id)} alt={record.title} />
