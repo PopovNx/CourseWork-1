@@ -1,12 +1,12 @@
 use actix_cors::Cors;
 use actix_web::{get, web, App, HttpServer};
 use dotenvy::dotenv;
-use serde::Deserialize;
 use log::info;
+use serde::Deserialize;
 
 pub mod database;
-pub mod routes;
 pub mod files_processor;
+pub mod routes;
 
 #[derive(Debug, Deserialize)]
 struct ServerConfig {
@@ -14,13 +14,10 @@ struct ServerConfig {
     database_url: String,
 }
 
-
 #[get("/")]
 async fn index() -> &'static str {
     "Hello from backend"
 }
-
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -31,7 +28,7 @@ async fn main() -> std::io::Result<()> {
     let state = web::Data::new(db);
     let server = HttpServer::new(move || {
         let cors = Cors::default()
-        .allowed_origin("http://localhost:5173")
+            .allowed_origin("http://localhost:5173")
             .allow_any_method()
             .allow_any_header();
 

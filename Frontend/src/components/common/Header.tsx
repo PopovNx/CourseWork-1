@@ -3,7 +3,6 @@ import "./Header.scss";
 import { Link, useLocation } from "react-router-dom";
 const Header: React.FC = () => {
   const location = useLocation();
-
   return (
     <div className="Header">
       <h1>PVQ Player</h1>

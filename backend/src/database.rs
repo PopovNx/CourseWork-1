@@ -16,4 +16,3 @@ impl MusicDb {
         Ok(MusicDb { pool })
     }
 }
-

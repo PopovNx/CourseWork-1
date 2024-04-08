@@ -14,7 +14,6 @@ export abstract class Api {
   });
 
   public static async fetchMusicRecords(): Promise<MusicRecord[]> {
- //   await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log("fetchMusicRecords");
     const data = await Api.instance.get("tracks");
     try {
