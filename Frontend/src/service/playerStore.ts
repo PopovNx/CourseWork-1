@@ -72,7 +72,6 @@ export const useMusicPlayer = create<MusicPlayerState>((set, get) => ({
     mediaSession.setActionHandler("pause", () => state.pausePlay());
     mediaSession.setActionHandler("previoustrack", () => state.previous());
     mediaSession.setActionHandler("nexttrack", () => state.next());
-    
   },
   setCurrentTrackId: (id) => {
     get().addId(id);
